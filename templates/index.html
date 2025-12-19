@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FS Recovery Tool Pro</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">FS</div>
+                <div>SYS.ADMIN<br><span class="version">v2.5.0</span></div>
+            </div>
+            
+            <div class="menu-label">CONTROLS</div>
+            <button onclick="openCreateModal()" class="btn-primary">
+                <span>+</span> New File
+            </button>
+
+            <div class="menu-label">MAINTENANCE</div>
+            <button onclick="optimizeDisk()" class="btn-menu">
+                <span class="icon">⚡</span> Defrag / Optimize
+            </button>
+            <button onclick="simulateCrash()" class="btn-menu danger">
+                <span class="icon">☠️</span> Simulate Crash
+            </button>
+
+            <div class="disk-stats">
+                <div class="menu-label">DISK HEALTH</div>
+                <div class="health-indicator" id="health-indicator">
+                    <div class="pulse"></div>
+                    <span id="status-text">ONLINE</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="workspace">
+            <header>
+                <h1>/dev/vdisk01 - Dashboard</h1>
+                <div class="refresh-btn" onclick="fetchData()">↻ Refresh</div>
+            </header>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <h3>Block Allocation Map</h3>
+                    <div class="legend">
+                        <span class="dot sys"></span> Reserved
+                        <span class="dot used"></span> Data
+                        <span class="dot free"></span> Free
+                    </div>
+                </div>
+                <div class="grid-container" id="diskGrid"></div>
+            </section>
+
+            <section class="panel">
+                <h3>Directory Listing</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>FILENAME</th>
+                            <th>BLOCK ID</th>
+                            <th>SIZE</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fileTable"></tbody>
+                </table>
+            </section>
+
+            <section class="terminal-panel">
+                <div class="terminal-header"> >_ SYSTEM LOG</div>
+                <div class="terminal-body" id="sysLog">
+                    <div class="log-line">[BOOT] System initialized...</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="createModal" class="modal-overlay">
+        <div class="modal">
+            <h2>Create New File</h2>
+            <input type="text" id="fileName" placeholder="filename.txt">
+            <textarea id="fileContent" placeholder="Enter file content..."></textarea>
+            <div class="modal-actions">
+                <button onclick="closeModal('createModal')" class="btn-ghost">Cancel</button>
+                <button onclick="createFile()" class="btn-primary">Write to Disk</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="readModal" class="modal-overlay">
+        <div class="modal">
+            <h2 id="readTitle">File Content</h2>
+            <div id="readBody" class="code-block"></div>
+            <div class="modal-actions">
+                <button onclick="closeModal('readModal')" class="btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal-overlay">
+        <div class="modal">
+            <h2>Edit File Content</h2>
+            <p style="color: #94a3b8; font-size: 0.8rem;">Editing: <span id="editFileNameDisplay" style="color:white;"></span></p>
+            <textarea id="editFileContent" placeholder="Enter new content..."></textarea>
+            <div class="modal-actions">
+                <button onclick="closeModal('editModal')" class="btn-ghost">Cancel</button>
+                <button onclick="saveEdit()" class="btn-primary">Update File</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
